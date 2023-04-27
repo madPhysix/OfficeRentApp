@@ -12,8 +12,8 @@ using OfficeRentApp.Data;
 namespace OfficeRentApp.Migrations
 {
     [DbContext(typeof(OfficeRentDbContext))]
-    [Migration("20230420070702_InitMig")]
-    partial class InitMig
+    [Migration("20230426110642_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -41,6 +41,9 @@ namespace OfficeRentApp.Migrations
 
                     b.Property<int>("Floor")
                         .HasColumnType("int");
+
+                    b.Property<string>("ImagePath")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsEmpty")
                         .HasColumnType("bit");

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace OfficeRentApp.Migrations
 {
-    public partial class InitMig : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -19,7 +19,8 @@ namespace OfficeRentApp.Migrations
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Floor = table.Column<int>(type: "int", nullable: false),
                     PricePerHour = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    IsEmpty = table.Column<bool>(type: "bit", nullable: false)
+                    IsEmpty = table.Column<bool>(type: "bit", nullable: false),
+                    ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -49,18 +50,18 @@ namespace OfficeRentApp.Migrations
 
             migrationBuilder.InsertData(
                 table: "Offices",
-                columns: new[] { "Id", "Address", "BuildingName", "Floor", "IsEmpty", "PricePerHour" },
-                values: new object[] { 1, "44 Jafar Jabbarli street, Baku 1065", "Caspian Plaza", 8, true, 60m });
+                columns: new[] { "Id", "Address", "BuildingName", "Floor", "ImagePath", "IsEmpty", "PricePerHour" },
+                values: new object[] { 1, "44 Jafar Jabbarli street, Baku 1065", "Caspian Plaza", 8, null, true, 60m });
 
             migrationBuilder.InsertData(
                 table: "Offices",
-                columns: new[] { "Id", "Address", "BuildingName", "Floor", "IsEmpty", "PricePerHour" },
-                values: new object[] { 2, "44 Jafar Jabbarli street, Baku 1065", "Caspian Plaza", 15, true, 85m });
+                columns: new[] { "Id", "Address", "BuildingName", "Floor", "ImagePath", "IsEmpty", "PricePerHour" },
+                values: new object[] { 2, "44 Jafar Jabbarli street, Baku 1065", "Caspian Plaza", 15, null, true, 85m });
 
             migrationBuilder.InsertData(
                 table: "Offices",
-                columns: new[] { "Id", "Address", "BuildingName", "Floor", "IsEmpty", "PricePerHour" },
-                values: new object[] { 3, "44 Jafar Jabbarli street, Baku 1065", "Caspian Plaza", 3, true, 40m });
+                columns: new[] { "Id", "Address", "BuildingName", "Floor", "ImagePath", "IsEmpty", "PricePerHour" },
+                values: new object[] { 3, "44 Jafar Jabbarli street, Baku 1065", "Caspian Plaza", 3, null, true, 40m });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Rentals_OfficeId",

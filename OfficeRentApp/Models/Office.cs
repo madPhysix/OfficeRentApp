@@ -10,8 +10,8 @@ namespace OfficeRentApp.Models
         public int Floor { get; set; }
         public decimal PricePerHour { get; set; }
         public List<Rental>? Rental { get; set; } 
-        public bool IsEmpty { get; set; } = true;
-        public List<IFormFile> Images { get; set; }
+        public bool IsEmpty { get; set; } = true; 
+        public string? ImagePath { get; set; }
         public Office()
         {
 

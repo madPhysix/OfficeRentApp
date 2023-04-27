@@ -40,6 +40,9 @@ namespace OfficeRentApp.Migrations
                     b.Property<int>("Floor")
                         .HasColumnType("int");
 
+                    b.Property<string>("ImagePath")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsEmpty")
                         .HasColumnType("bit");
 

@@ -7,118 +7,49 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OfficeRentApp.Data;
 using OfficeRentApp.Models;
+using OfficeRentApp.Helpers;
+using OfficeRentApp.Repositories.OfficeRepositories;
 
 namespace OfficeRentApp.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class OfficesController : ControllerBase
     {
-        private readonly OfficeRentDbContext _context;
-
-        public OfficesController(OfficeRentDbContext context)
+        private readonly IOfficeRepository _repository;
+        public OfficesController(IOfficeRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
+        
 
         // GET: api/Offices
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Office>>> GetOffices()
+        public IEnumerable<Office> GetOffices()
         {
-          if (_context.Offices == null)
-          {
-              return NotFound();
-          }
-            return await _context.Offices.ToListAsync();
+          return _repository.GetOffices();
         }
 
         // GET: api/Offices/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Office>> GetOffice(int id)
+        public Office GetOffice(int id)
         {
-          if (_context.Offices == null)
-          {
-              return NotFound();
-          }
-            var office = await _context.Offices.FindAsync(id);
-
-            if (office == null)
-            {
-                return NotFound();
-            }
-
-            return office;
-        }
-
-        // PUT: api/Offices/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutOffice(int id, Office office)
-        {
-            if (id != office.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(office).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!OfficeExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            return _repository.GetOfficeById(id);
         }
 
         // POST: api/Offices
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Office>> PostOffice(Office office)
+        public void PostOffice([FromForm] Office office, IFormFile objfile)
         {
-          if (_context.Offices == null)
-          {
-              return Problem("Entity set 'OfficeRentDbContext.Offices'  is null.");
-          }
-            _context.Offices.Add(office);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetOffice", new { id = office.Id }, office);
+            _repository.AddOffice(office, objfile);
         }
 
         // DELETE: api/Offices/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteOffice(int id)
+        public void DeleteOffice(int id)
         {
-            if (_context.Offices == null)
-            {
-                return NotFound();
-            }
-            var office = await _context.Offices.FindAsync(id);
-            if (office == null)
-            {
-                return NotFound();
-            }
-
-            _context.Offices.Remove(office);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool OfficeExists(int id)
-        {
-            return (_context.Offices?.Any(e => e.Id == id)).GetValueOrDefault();
+            _repository.DeleteOffice(id);
         }
     }
 }
