@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OfficeRentApp.Data;
+using OfficeRentApp.Helpers;
 using OfficeRentApp.Models;
 
 namespace OfficeRentApp.Repositories.RentalRepositories
@@ -7,15 +8,24 @@ namespace OfficeRentApp.Repositories.RentalRepositories
     public class RentalRepository : IRentalRepository
     {
         private readonly OfficeRentDbContext _context;
+        
         public RentalRepository(OfficeRentDbContext context) 
         {
             _context = context;
         }
-        public void AddRental(Rental rental)
+        public string AddRental(Rental rental)
         {
             ClearData();
+            var existingRentals = _context.Rentals.Where(r => r.OfficeId == rental.OfficeId).ToList();
+                foreach (var existingRental in existingRentals)
+                {
+                    if (RentalTimeHandler.RentTimeHandler(existingRental, rental)) continue;
+                    else return $"The Office is busy from {existingRental.StartOfRent.ToString("dddd HH:mm")} till {existingRental.EndOfRent.ToString("dddd HH:mm")}";
+                }
+            
             _context.Rentals.Add(rental);
             Save();
+            return "Registered!";
         }
 
         public void DeleteRental(int id)
@@ -38,12 +48,11 @@ namespace OfficeRentApp.Repositories.RentalRepositories
         {
             ClearData();
             var rentals = _context.Rentals.ToList();
-                return rentals;
+            return rentals;
         }
 
         public void Save()
         {
-            ClearData();
             _context.SaveChanges();
         }
         public void ClearData()

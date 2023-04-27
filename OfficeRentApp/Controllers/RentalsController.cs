@@ -41,9 +41,9 @@ namespace OfficeRentApp.Controllers
         // POST: api/Rentals
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public void PostRental(Rental rental)
+        public string PostRental(Rental rental)
         {
-            _rentalRepository.AddRental(rental);
+            return _rentalRepository.AddRental(rental);
         }
 
         // DELETE: api/Rentals/5

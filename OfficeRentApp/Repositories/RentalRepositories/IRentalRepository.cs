@@ -6,7 +6,7 @@ namespace OfficeRentApp.Repositories.RentalRepositories
     {
         public IEnumerable<Rental> GetRentals();
         public Rental GetRental(int id);
-        public void AddRental(Rental rental);
+        public string AddRental(Rental rental);
         public void DeleteRental(int id);
         public void Save();
         public void ClearData();
