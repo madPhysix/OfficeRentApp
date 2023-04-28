@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OfficeRentApp.Models;
+using OfficeRentApp.Models.UserModels;
+using System.Security.Cryptography;
 
 namespace OfficeRentApp.Data
 {
@@ -11,6 +13,7 @@ namespace OfficeRentApp.Data
         }
         public DbSet<Office> Offices { get; set; }
         public DbSet<Rental> Rentals { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelbuilder)
         {
@@ -40,7 +43,7 @@ namespace OfficeRentApp.Data
                         Floor = 3,
                         PricePerHour = 40
                     }
-                ) ;
+                );
         }
     }
 }
