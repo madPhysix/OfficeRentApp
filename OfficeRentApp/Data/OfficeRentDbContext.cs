@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OfficeRentApp.Models;
-using OfficeRentApp.Models.UserModels;
 using System.Security.Cryptography;
 
 namespace OfficeRentApp.Data
@@ -14,7 +13,7 @@ namespace OfficeRentApp.Data
         public DbSet<Office> Offices { get; set; }
         public DbSet<Rental> Rentals { get; set; }
         public DbSet<User> Users { get; set; }
-
+        public DbSet<UserRoleDefine> Roles { get; set; }
         protected override void OnModelCreating(ModelBuilder modelbuilder)
         {
             modelbuilder.Entity<Office>().HasData
@@ -42,6 +41,31 @@ namespace OfficeRentApp.Data
                         Address = "44 Jafar Jabbarli street, Baku 1065",
                         Floor = 3,
                         PricePerHour = 40
+                    }
+                );
+            modelbuilder.Entity<User>().HasData
+                (
+                new User
+                {
+                    Id = 1,
+                    Email = "froggyrain123@gmail.com",
+                    FirstName = "Farhad",
+                    LastName = "Alizada",
+                    UserName = "aleezade"
+                }
+                );
+            modelbuilder.Entity<UserRoleDefine>().HasData
+                (
+                    new UserRoleDefine
+                    {
+                        Id = 1,
+                        Role = "User"
+                    },
+                    new UserRoleDefine
+                    {
+                        Id = 2,
+                        UserId = 1,
+                        Role = "Admin"
                     }
                 );
         }

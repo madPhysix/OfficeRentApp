@@ -6,6 +6,7 @@ using OfficeRentApp.Data;
 using OfficeRentApp.Helpers;
 using OfficeRentApp.Repositories.OfficeRepositories;
 using OfficeRentApp.Repositories.RentalRepositories;
+using OfficeRentApp.Repositories.UserAuthRepositories;
 using System.Configuration;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -62,6 +63,7 @@ builder.Services.AddSwaggerGen(option =>
 builder.Services.AddDbContext<OfficeRentDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("Data")));
 builder.Services.AddScoped<IOfficeRepository, OfficeRepository>();
 builder.Services.AddScoped<IRentalRepository, RentalRepository>();
+builder.Services.AddScoped<IUserAuth, UserAuth>();
 builder.Services.AddScoped<ImageManipulation>();
 var app = builder.Build();
 

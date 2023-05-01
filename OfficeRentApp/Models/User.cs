@@ -1,4 +1,4 @@
-﻿namespace OfficeRentApp.Models.UserModels
+﻿namespace OfficeRentApp.Models
 {
     public class User
     {
@@ -6,8 +6,8 @@
         public string UserName { get; set; }
         public byte[] PasswordHash { get; set; }
         public string Email { get; set; }
-        public string Role { get; set; } = "User";
-        public string Surname { get; set; }
-        public string GivenName { get; set; }
+        public string Token { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
     }
 }

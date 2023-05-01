@@ -9,6 +9,8 @@ using OfficeRentApp.Data;
 using OfficeRentApp.Models;
 using OfficeRentApp.Helpers;
 using OfficeRentApp.Repositories.OfficeRepositories;
+using Microsoft.AspNetCore.Authorization;
+using OfficeRentApp.DTO;
 
 namespace OfficeRentApp.Controllers
 {
@@ -40,16 +42,20 @@ namespace OfficeRentApp.Controllers
         // POST: api/Offices
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public void PostOffice([FromForm] Office office, IFormFile objfile)
+        public IActionResult PostOffice(UserDto userDto, [FromForm] Office office, IFormFile objfile)
         {
-            _repository.AddOffice(office, objfile);
+            if (_repository.AddOffice(userDto, office, objfile))
+                return Ok();
+            return Unauthorized();
         }
 
         // DELETE: api/Offices/5
         [HttpDelete("{id}")]
-        public void DeleteOffice(int id)
+        public IActionResult DeleteOffice(UserDto userDto, int id)
         {
-            _repository.DeleteOffice(id);
+            if (_repository.DeleteOffice(userDto, id))
+                return Ok();
+            return Unauthorized();
         }
     }
 }
