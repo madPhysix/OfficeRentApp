@@ -24,7 +24,13 @@ namespace OfficeRentApp.Data
                         BuildingName = "Caspian Plaza",
                         Address = "44 Jafar Jabbarli street, Baku 1065",
                         Floor = 8,
-                        PricePerHour = 60
+                        PricePerHour = 60,
+                        Description = "bomba ofisdi",
+                        HasAC = true,
+                        HasCoffeeService = true,
+                        HasParking = true,
+                        HasWifi = true,
+                        Location = "40.3853494919391, 49.828683540862414"
                     },
                     new Office
                     {
@@ -32,7 +38,13 @@ namespace OfficeRentApp.Data
                         BuildingName = "Caspian Plaza",
                         Address = "44 Jafar Jabbarli street, Baku 1065",
                         Floor = 15,
-                        PricePerHour = 85
+                        PricePerHour = 85,
+                        Description = "bomba ofisdi",
+                        HasAC = true,
+                        HasCoffeeService = true,
+                        HasParking = true,
+                        HasWifi = true,
+                        Location = "40.3853494919391, 49.828683540862414"
                     },
                     new Office
                     {
@@ -40,19 +52,14 @@ namespace OfficeRentApp.Data
                         BuildingName = "Caspian Plaza",
                         Address = "44 Jafar Jabbarli street, Baku 1065",
                         Floor = 3,
-                        PricePerHour = 40
+                        PricePerHour = 40,
+                        Description = "bomba ofisdi",
+                        HasAC = true,
+                        HasCoffeeService = true,
+                        HasParking = true,
+                        HasWifi = true,
+                        Location = "40.3853494919391, 49.828683540862414"
                     }
-                );
-            modelbuilder.Entity<User>().HasData
-                (
-                new User
-                {
-                    Id = 1,
-                    Email = "froggyrain123@gmail.com",
-                    FirstName = "Farhad",
-                    LastName = "Alizada",
-                    UserName = "aleezade"
-                }
                 );
             modelbuilder.Entity<UserRoleDefine>().HasData
                 (
@@ -64,7 +71,6 @@ namespace OfficeRentApp.Data
                     new UserRoleDefine
                     {
                         Id = 2,
-                        UserId = 1,
                         Role = "Admin"
                     }
                 );

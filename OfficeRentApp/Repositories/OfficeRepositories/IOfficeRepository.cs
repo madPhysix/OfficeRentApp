@@ -7,9 +7,9 @@ namespace OfficeRentApp.Repositories.OfficeRepositories
     public interface IOfficeRepository
     {
         public IEnumerable<Office> GetOffices();
-        public Office GetOfficeById(int id);
-        public bool AddOffice(UserDto userDto, [FromForm] Office office, IFormFile objfile);
-        public bool DeleteOffice(UserDto userDto, int id);
+        public IEnumerable<Office> GetOfficeByFilter(string address, decimal minPrice, decimal maxPrice, DateTime checkInTime, int hours);
+        public bool AddOffice([FromForm] Office office, IFormFile objfile);
+        public bool DeleteOffice(int id);
         public void Save();
     }
 }

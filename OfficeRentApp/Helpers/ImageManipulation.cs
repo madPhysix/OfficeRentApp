@@ -19,7 +19,7 @@
                     {
                         Directory.CreateDirectory(_environment.WebRootPath + "\\Upload\\");
                     }
-                    using (FileStream fileStream = System.IO.File.Create(_environment.WebRootPath + "\\Upload\\" + objfile.FileName))
+                    using (FileStream fileStream = System.IO.File.Create(_environment.WebRootPath + "\\Upload\\" + DateTime.Now.ToShortDateString() + objfile.FileName ))
                     {
                         objfile.CopyTo(fileStream);
                         fileStream.Flush();

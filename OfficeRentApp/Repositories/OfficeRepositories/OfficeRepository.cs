@@ -5,6 +5,7 @@ using OfficeRentApp.Models;
 using OfficeRentApp.Helpers;
 using OfficeRentApp.DTO;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace OfficeRentApp.Repositories.OfficeRepositories
 {
@@ -18,10 +19,9 @@ namespace OfficeRentApp.Repositories.OfficeRepositories
             _imageManipulation = imagemanipulator;
         }
 
-        public bool AddOffice(UserDto userDto, [FromForm] Office office, IFormFile objfile)
+        [Authorize(Roles ="Admin")]
+        public bool AddOffice([FromForm] Office office, IFormFile objfile)
         {
-            if (userDto.Role == "User")
-                return false;
             _imageManipulation.ImageAdd(objfile);
             office.ImagePath = "\\Upload\\" + objfile.FileName;
             _context.Offices.Add(office);
@@ -29,31 +29,35 @@ namespace OfficeRentApp.Repositories.OfficeRepositories
             return true;
         }
 
-        public bool DeleteOffice(UserDto userDto, int id)
+        [Authorize(Roles = "Admin")]
+        public bool DeleteOffice(int id)
         {
-            if (userDto.Role == "User")
-                return false;
+            
             var office = _context.Offices.Find(id);
-            _context.Offices.Remove(office);
-            Save();
+            if (office != null)
+            {
+                _context.Offices.Remove(office);
+                Save();
+            }
             return true;
         }
 
 
-        public Office GetOfficeFilter()
+        public IEnumerable<Office> GetOfficeByFilter(string address, decimal minPrice, decimal maxPrice, DateTime checkInTime, int hours)
         {
-                return _context.Offices.Find(id);
+            return _context.Offices
+                   .Where(x => x.Address.Contains(address) && x.PricePerHour >= minPrice && x.PricePerHour <= maxPrice
+                    && x.Rental.Any(r => r.StartOfRent> checkInTime.AddHours(hours) || checkInTime > r.EndOfRent));
         }
 
         public IEnumerable<Office> GetOffices()
         {
-            return _context.Offices.ToList();
+            return _context.Offices.Include(x => x.Rental).ThenInclude(x => x.StartOfRent).Include(r => r.Rental).ThenInclude(x => x.EndOfRent);
         }
 
         public void Save()
         {
             _context.SaveChanges();
         }
-
     }
 }

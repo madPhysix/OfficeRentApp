@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using OfficeRentApp.Data;
 using OfficeRentApp.DTO;
@@ -36,14 +37,6 @@ namespace OfficeRentApp.Repositories.UserAuthRepositories
             newUser.LastName = registerRequest.LastName;
             _context.Users.Add(newUser);
             _context.SaveChanges();
-            UserRoleDefine userRole = new UserRoleDefine()
-            {
-                Id = 0,
-                UserId = _context.Users.Where(i => i.UserName == newUser.UserName).Select(x => x.Id).FirstOrDefault(),
-                Role = "User"
-            };
-            _context.Roles.Add(userRole);
-            _context.SaveChanges();
 
             return "User registered succesfully!";
         }
@@ -66,9 +59,10 @@ namespace OfficeRentApp.Repositories.UserAuthRepositories
 
             var claims = new[]
             {
-                new Claim("UserName", userDto.UserName),
-                new Claim("FirstName", userDto.FirstName),
-                new Claim("LastName", userDto.LastName)
+                new Claim(ClaimTypes.Role, _context.Roles.Where(x => x.Id == userDto.RoleId).Select(r => r.Role).First()),
+                new Claim(ClaimTypes.Name, userDto.UserName),
+                new Claim(ClaimTypes.GivenName, userDto.FirstName),
+                new Claim(ClaimTypes.Surname, userDto.LastName)
             };
 
             var token = new JwtSecurityToken(_config["Jwt:Issuer"],
@@ -84,19 +78,21 @@ namespace OfficeRentApp.Repositories.UserAuthRepositories
         {
             byte[] userLoginPasswordHash = CreatePasswordHash(userLogin.Password);
 
-            var userDto = _context.Users.Where(cx => cx.Email == userLogin.Email && cx.PasswordHash == userLoginPasswordHash)
-                .Join(_context.Roles, cx => cx.Id, rs => rs.UserId, (cx, rs) =>
-            new
-            {
-                Id = cx.Id,
-                UserName = cx.UserName,
-                Token = cx.Token,
-                Role = rs.Role
-            });
-                         
+            var userDto = _context.Users.Include(u => u.userRole)
+                .Where(cx => cx.Email == userLogin.Email && cx.PasswordHash == userLoginPasswordHash)
+                .Select(o => new UserDto
+                {
+                    Id = o.Id,
+                    UserName = o.UserName,
+                    FirstName = o.FirstName,
+                    LastName = o.LastName,
+                    RoleId = o.RoleId,
+                    Token = o.Token
+                }).First();
+
             if (userDto != null)
             {
-                return (UserDto)userDto;
+                return userDto;
             }
             return null;
         }

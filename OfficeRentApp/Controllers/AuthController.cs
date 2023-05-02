@@ -29,7 +29,7 @@ namespace OfficeRentApp.Controllers
         }
 
         [HttpPost("login")]
-        public string Login(UserLogin login)
+        public UserDto Login(UserLogin login)
         {
            return _userauth.Login(login);
         }

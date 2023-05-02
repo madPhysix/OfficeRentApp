@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using OfficeRentApp.Data;
 using OfficeRentApp.Helpers;
 using OfficeRentApp.Models;
@@ -13,6 +14,7 @@ namespace OfficeRentApp.Repositories.RentalRepositories
         {
             _context = context;
         }
+        [Authorize(Roles = "Admin,User")]
         public string AddRental(Rental rental)
         {
             ClearData();
@@ -20,7 +22,8 @@ namespace OfficeRentApp.Repositories.RentalRepositories
                 foreach (var existingRental in existingRentals)
                 {
                     if (RentalTimeHandler.RentTimeHandler(existingRental, rental)) continue;
-                    else return $"The Office is busy from {existingRental.StartOfRent.ToString("dddd HH:mm")} till {existingRental.EndOfRent.ToString("dddd HH:mm")}";
+                    else return $"The Office is busy from {existingRental.StartOfRent.ToString("dddd HH:mm")} " +
+                        $"till {existingRental.EndOfRent.ToString("dddd HH:mm")}";
                 }
             
             _context.Rentals.Add(rental);

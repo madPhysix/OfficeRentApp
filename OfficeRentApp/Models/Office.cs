@@ -14,8 +14,6 @@ namespace OfficeRentApp.Models
         public List<Rental>? Rental { get; set; } 
         public string? ImagePath { get; set; }
         public string Location { get; set; }
-        public string City { get; set; }
-        public string Street { get; set; }
         public bool HasParking { get; set; }
         public bool HasAC { get; set; }
         public bool HasWifi { get; set; }
