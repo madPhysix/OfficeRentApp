@@ -33,8 +33,8 @@ namespace OfficeRentApp.Controllers
         }
 
         // GET: api/Offices/5
-        [HttpGet("{id}")]
-        public IEnumerable<Office> GetOfficesByFilter(string address, decimal minPrice, decimal maxPrice, DateTime checkInTime, int hours)
+        [HttpGet]
+        public IEnumerable<Office> GetOfficesByFilter(string address, decimal? minPrice, decimal? maxPrice, DateTime? checkInTime, int? hours)
         {
             return _repository.GetOfficeByFilter(address, minPrice, maxPrice, checkInTime, hours);
         }
@@ -43,7 +43,7 @@ namespace OfficeRentApp.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [Authorize(Roles ="Admin")]
-        public IActionResult PostOffice(UserDto userDto, [FromForm] Office office, IFormFile objfile)
+        public IActionResult PostOffice([FromForm] Office office, IFormFile objfile)
         {
             if (_repository.AddOffice(office, objfile))
                 return Ok();
@@ -52,6 +52,7 @@ namespace OfficeRentApp.Controllers
 
         // DELETE: api/Offices/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public IActionResult DeleteOffice(int id)
         {
             if (_repository.DeleteOffice(id))

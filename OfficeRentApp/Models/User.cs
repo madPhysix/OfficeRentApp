@@ -9,9 +9,14 @@ namespace OfficeRentApp.Models
         public byte[] PasswordHash { get; set; }
         public string Email { get; set; }
         public string? Token { get; set; }
-        public int RoleId { get; set; } = 2;
-        public UserRoleDefine userRole { get; set; }
+        [ForeignKey("UserRoleDefine")]
+        public int RoleId { get; set; } = 1;
+        public UserRoleDefine Role { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public User()
+        {
+
+        }
     }
 }

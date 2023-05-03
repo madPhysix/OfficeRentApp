@@ -50,8 +50,7 @@ namespace OfficeRentApp.Repositories.RentalRepositories
         public IEnumerable<Rental> GetRentals()
         {
             ClearData();
-            var rentals = _context.Rentals.ToList();
-            return rentals;
+            return _context.Rentals.ToList();
         }
 
         public void Save()

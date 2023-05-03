@@ -11,7 +11,7 @@ namespace OfficeRentApp.Models
         public string Description { get; set; }
         public int Floor { get; set; }
         public decimal PricePerHour { get; set; }
-        public List<Rental>? Rental { get; set; } 
+        public List<Rental>? Rentals { get; set; } 
         public string? ImagePath { get; set; }
         public string Location { get; set; }
         public bool HasParking { get; set; }

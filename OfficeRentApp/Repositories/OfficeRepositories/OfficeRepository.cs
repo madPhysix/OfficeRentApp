@@ -19,7 +19,7 @@ namespace OfficeRentApp.Repositories.OfficeRepositories
             _imageManipulation = imagemanipulator;
         }
 
-        [Authorize(Roles ="Admin")]
+        
         public bool AddOffice([FromForm] Office office, IFormFile objfile)
         {
             _imageManipulation.ImageAdd(objfile);
@@ -43,16 +43,42 @@ namespace OfficeRentApp.Repositories.OfficeRepositories
         }
 
 
-        public IEnumerable<Office> GetOfficeByFilter(string address, decimal minPrice, decimal maxPrice, DateTime checkInTime, int hours)
+        public IEnumerable<Office> GetOfficeByFilter(string address, decimal? minPrice, decimal? maxPrice, DateTime? checkInTime, int? hours)
         {
-            return _context.Offices
+            /*return _context.Offices
                    .Where(x => x.Address.Contains(address) && x.PricePerHour >= minPrice && x.PricePerHour <= maxPrice
-                    && x.Rental.Any(r => r.StartOfRent> checkInTime.AddHours(hours) || checkInTime > r.EndOfRent));
+                    && (x.Rentals.Any(r => r.StartOfRent > checkInTime.AddHours(hours) || checkInTime > r.EndOfRent) || x.Rentals.Count == 0));*/
+
+            var query = _context.Offices.AsQueryable();
+
+            if (!string.IsNullOrEmpty(address))
+            {
+                query = query.Where(d => d.Address.Contains(address));
+            }
+
+            if (minPrice.HasValue)
+            {
+                query = query.Where(d => d.PricePerHour >= minPrice);
+            }
+
+            if (maxPrice.HasValue)
+            {
+                query = query.Where(d => d.PricePerHour <= maxPrice);
+            }
+
+            if (checkInTime.HasValue && hours.HasValue)
+            {
+                DateTime updatedDate = checkInTime.Value;
+                int updatedHours = hours.Value;
+                query = query.Where(x => x.Rentals.Any(r => r.StartOfRent > updatedDate.AddHours(updatedHours) || updatedDate > r.EndOfRent) || x.Rentals.Count == 0);
+            }
+
+            return query.ToList();
         }
 
         public IEnumerable<Office> GetOffices()
         {
-            return _context.Offices.Include(x => x.Rental).ThenInclude(x => x.StartOfRent).Include(r => r.Rental).ThenInclude(x => x.EndOfRent);
+            return _context.Offices.Include(o => o.Rentals);
         }
 
         public void Save()

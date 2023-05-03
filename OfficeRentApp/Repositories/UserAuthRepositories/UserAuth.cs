@@ -78,7 +78,7 @@ namespace OfficeRentApp.Repositories.UserAuthRepositories
         {
             byte[] userLoginPasswordHash = CreatePasswordHash(userLogin.Password);
 
-            var userDto = _context.Users.Include(u => u.userRole)
+            var userDto = _context.Users.Include(u => u.Role)
                 .Where(cx => cx.Email == userLogin.Email && cx.PasswordHash == userLoginPasswordHash)
                 .Select(o => new UserDto
                 {
