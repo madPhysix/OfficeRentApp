@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using OfficeRentApp.Helpers;
 using OfficeRentApp.Models;
 using System.Security.Cryptography;
 
@@ -14,6 +15,7 @@ namespace OfficeRentApp.Data
         public DbSet<Rental> Rentals { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserRoleDefine> Roles { get; set; }
+        public DbSet<ImageManipulation> Images { get; set; }
         protected override void OnModelCreating(ModelBuilder modelbuilder)
         {
             modelbuilder.Entity<Office>().HasData

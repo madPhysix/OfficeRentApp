@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OfficeRentApp.Models
 {
@@ -8,6 +9,7 @@ namespace OfficeRentApp.Models
         public string UserName { get; set; }
         public byte[] PasswordHash { get; set; }
         public string Email { get; set; }
+        public string PhoneNumber { get; set; }
         public string? Token { get; set; }
         [ForeignKey("UserRoleDefine")]
         public int RoleId { get; set; } = 1;

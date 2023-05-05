@@ -23,13 +23,13 @@ namespace OfficeRentApp.Controllers
         {
             _repository = repository;
         }
-        
+
 
         // GET: api/Offices
         [HttpGet]
         public IEnumerable<Office> GetOffices()
         {
-          return _repository.GetOffices();
+            return _repository.GetOffices();
         }
 
         // GET: api/Offices/5
@@ -39,13 +39,19 @@ namespace OfficeRentApp.Controllers
             return _repository.GetOfficeByFilter(address, minPrice, maxPrice, checkInTime, hours);
         }
 
+        [HttpPost]
+        public IEnumerable<Office> GetOfficesByIds(int[] ids)
+        {
+            return _repository.GetOfficesByIds(ids);
+        }
+        
         // POST: api/Offices
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [Authorize(Roles ="Admin")]
-        public IActionResult PostOffice([FromForm] Office office, IFormFile objfile)
+        public IActionResult PostOffice([FromForm] Office office, IEnumerable<IFormFile> objfiles)
         {
-            if (_repository.AddOffice(office, objfile))
+            if (_repository.AddOffice(office, objfiles))
                 return Ok();
             return Unauthorized();
         }

@@ -33,6 +33,7 @@ namespace OfficeRentApp.Repositories.UserAuthRepositories
             newUser.UserName = registerRequest.UserName;
             newUser.PasswordHash = CreatePasswordHash(registerRequest.Password);
             newUser.Email = registerRequest.Email;
+            newUser.PhoneNumber = registerRequest.PhoneNumber;
             newUser.FirstName = registerRequest.FirstName;
             newUser.LastName = registerRequest.LastName;
             _context.Users.Add(newUser);
@@ -86,6 +87,7 @@ namespace OfficeRentApp.Repositories.UserAuthRepositories
                     UserName = o.UserName,
                     FirstName = o.FirstName,
                     LastName = o.LastName,
+                    PhoneNumber = o.PhoneNumber,
                     RoleId = o.RoleId,
                     Token = o.Token
                 }).First();

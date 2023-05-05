@@ -19,13 +19,17 @@ namespace OfficeRentApp.Repositories.OfficeRepositories
             _imageManipulation = imagemanipulator;
         }
 
-        
-        public bool AddOffice([FromForm] Office office, IFormFile objfile)
+        public IEnumerable<Office> GetOfficesByIds(int[] ids)
         {
-            _imageManipulation.ImageAdd(objfile);
-            office.ImagePath = "\\Upload\\" + objfile.FileName;
+            return _context.Offices.Where(o => ids.Contains(o.Id));
+        }
+
+
+        public bool AddOffice([FromForm] Office office, IEnumerable<IFormFile> objfiles)
+        {
             _context.Offices.Add(office);
             Save();
+            _imageManipulation.ImageAdd(office.Id ,objfiles);
             return true;
         }
 
@@ -73,12 +77,12 @@ namespace OfficeRentApp.Repositories.OfficeRepositories
                 query = query.Where(x => x.Rentals.Any(r => r.StartOfRent > updatedDate.AddHours(updatedHours) || updatedDate > r.EndOfRent) || x.Rentals.Count == 0);
             }
 
-            return query.ToList();
+            return query.Include(i => i.Images).ToList();
         }
 
         public IEnumerable<Office> GetOffices()
         {
-            return _context.Offices.Include(o => o.Rentals);
+            return _context.Offices.Include(o => o.Rentals).Include(i => i.Images);
         }
 
         public void Save()

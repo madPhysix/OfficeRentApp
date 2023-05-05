@@ -1,4 +1,5 @@
 ﻿using NuGet.Protocol.Plugins;
+using OfficeRentApp.Helpers;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OfficeRentApp.Models
@@ -12,7 +13,7 @@ namespace OfficeRentApp.Models
         public int Floor { get; set; }
         public decimal PricePerHour { get; set; }
         public List<Rental>? Rentals { get; set; } 
-        public string? ImagePath { get; set; }
+        public List<ImageManipulation>? Images{ get; set; }
         public string Location { get; set; }
         public bool HasParking { get; set; }
         public bool HasAC { get; set; }
