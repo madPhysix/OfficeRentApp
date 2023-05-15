@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using OfficeRentApp.Data;
+using OfficeRentApp.DTO;
 using OfficeRentApp.Helpers;
 using OfficeRentApp.Repositories.OfficeRepositories;
 using OfficeRentApp.Repositories.RentalRepositories;
@@ -64,6 +65,8 @@ builder.Services.AddScoped<IOfficeRepository, OfficeRepository>();
 builder.Services.AddScoped<IRentalRepository, RentalRepository>();
 builder.Services.AddScoped<IUserAuth, UserAuth>();
 builder.Services.AddScoped<ImageManipulation>();
+builder.Services.AddScoped<RandomCodeMaker>();
+builder.Services.AddScoped<EmailSender>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

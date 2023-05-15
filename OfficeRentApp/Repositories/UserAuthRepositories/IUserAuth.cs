@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using OfficeRentApp.DTO;
 using OfficeRentApp.Models;
+using System.Security.Claims;
 
 namespace OfficeRentApp.Repositories.UserAuthRepositories
 {
@@ -9,6 +10,9 @@ namespace OfficeRentApp.Repositories.UserAuthRepositories
     {
 
         public string RegisterUser(UserRegister registerRequest);
-        public UserDto Login([FromBody] UserLogin userLogin);
+        public Result Login([FromBody] UserLogin userLogin);
+        public bool PasswordChange(string userName, PasswordDto passwordDto);
+        public bool ForgotPassword(EmailDto emailDto ,int sentCode);
+        public Result RestorePassword(RestorePasswordDto restorePasswordDto);
     }
 }

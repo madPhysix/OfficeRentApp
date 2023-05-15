@@ -34,7 +34,7 @@ namespace OfficeRentApp.Controllers
 
         // GET: api/Offices/5
         [HttpGet]
-        public IEnumerable<Office> GetOfficesByFilter(string address, decimal? minPrice, decimal? maxPrice, DateTime? checkInTime, int? hours)
+        public IEnumerable<Office> GetOfficesByFilter(string? address, decimal? minPrice, decimal? maxPrice, DateTime? checkInTime, int? hours)
         {
             return _repository.GetOfficeByFilter(address, minPrice, maxPrice, checkInTime, hours);
         }

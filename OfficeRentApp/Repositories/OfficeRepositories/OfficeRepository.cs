@@ -47,12 +47,8 @@ namespace OfficeRentApp.Repositories.OfficeRepositories
         }
 
 
-        public IEnumerable<Office> GetOfficeByFilter(string address, decimal? minPrice, decimal? maxPrice, DateTime? checkInTime, int? hours)
+        public IEnumerable<Office> GetOfficeByFilter(string? address, decimal? minPrice, decimal? maxPrice, DateTime? checkInTime, int? hours)
         {
-            /*return _context.Offices
-                   .Where(x => x.Address.Contains(address) && x.PricePerHour >= minPrice && x.PricePerHour <= maxPrice
-                    && (x.Rentals.Any(r => r.StartOfRent > checkInTime.AddHours(hours) || checkInTime > r.EndOfRent) || x.Rentals.Count == 0));*/
-
             var query = _context.Offices.AsQueryable();
 
             if (!string.IsNullOrEmpty(address))
