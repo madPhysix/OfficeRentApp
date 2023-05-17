@@ -12,7 +12,7 @@ namespace OfficeRentApp.Repositories.UserAuthRepositories
         public string RegisterUser(UserRegister registerRequest);
         public Result Login([FromBody] UserLogin userLogin);
         public bool PasswordChange(string userName, PasswordDto passwordDto);
-        public bool ForgotPassword(EmailDto emailDto ,int sentCode);
+        public Result ForgotPassword(EmailDto emailDto ,int sentCode);
         public Result RestorePassword(RestorePasswordDto restorePasswordDto);
     }
 }

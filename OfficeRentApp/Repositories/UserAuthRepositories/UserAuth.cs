@@ -84,15 +84,25 @@ namespace OfficeRentApp.Repositories.UserAuthRepositories
             return false;
         }
 
-        public bool ForgotPassword(EmailDto emailDto, int sentCode)
+        public Result ForgotPassword(EmailDto emailDto, int sentCode)
         {
             {
                 if (!_context.Users.Any(u => u.Email == emailDto.Email))
-                    return false;
+                    return new Result { Message = "Email is not registered", Status = false};
+                try
+                {
                     _emailSender.SendEmail(emailDto, sentCode);
-                    return true;
                 }
-
+                catch (System.Net.Sockets.SocketException)
+                {
+                    return new Result { Status = false, Message = "An error ocured, try again"};
+                }
+                    return new Result 
+                    {
+                        Status = true,
+                        Message = "Email sent"
+                    };
+                }
             }
         
 

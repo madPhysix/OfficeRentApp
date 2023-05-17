@@ -62,7 +62,8 @@ namespace OfficeRentApp.Controllers
         public Result GenerateOTP(EmailDto emailDto)
         {
             int code = _randomCodeMaker.CreateRandomCode();
-            if (_userauth.ForgotPassword(emailDto, code))
+            Result result = _userauth.ForgotPassword(emailDto, code);
+            if (result.Status)
             {
                 return new Result
                 {
@@ -70,7 +71,7 @@ namespace OfficeRentApp.Controllers
                     Status = true
                 };
             }
-            return new Result { Data = null, Status = false, Message = "No user has found"};
+            return result;
         }
     }
 }
