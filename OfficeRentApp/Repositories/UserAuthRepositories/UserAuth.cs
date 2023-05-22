@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using OfficeRentApp.Data;
+using Microsoft.AspNetCore.Http;
 using OfficeRentApp.DTO;
 using OfficeRentApp.Models;
 using OfficeRentApp.Helpers;
@@ -21,11 +22,13 @@ namespace OfficeRentApp.Repositories.UserAuthRepositories
         private readonly OfficeRentDbContext _context;
         private IConfiguration _config;
         private EmailSender _emailSender;
-        public UserAuth(OfficeRentDbContext context, IConfiguration config, EmailSender emailSender)
+        private IHttpContextAccessor _httpContextAccessor;
+        public UserAuth(OfficeRentDbContext context, IConfiguration config, EmailSender emailSender, IHttpContextAccessor httpContext)
         {
             _context = context;
             _config = config;
             _emailSender = emailSender;
+            _httpContextAccessor = httpContext;
         }
 
         public string RegisterUser(UserRegister registerRequest)
@@ -57,6 +60,8 @@ namespace OfficeRentApp.Repositories.UserAuthRepositories
             if (userDto != null)
             {
                 userDto.Token = Generate(userDto);
+                var refreshToken = GenerateRefreshToken();
+                SetRefreshToken(userDto, refreshToken);
                 return new Result
                 {
                     Data = userDto,
@@ -188,6 +193,59 @@ namespace OfficeRentApp.Repositories.UserAuthRepositories
                 byte[] passwordHash = md5.ComputeHash(Encoding.UTF8.GetBytes(password));
                 return passwordHash;
             }
+        }
+
+        private RefreshToken GenerateRefreshToken()
+        {
+            var refreshToken = new RefreshToken
+            {
+                Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
+                Expires = DateTime.Now.AddDays(1),
+                Created = DateTime.Now
+            };
+            return refreshToken;
+        }
+
+        private void SetRefreshToken(UserDto userDto, RefreshToken newRefreshToken)
+        {
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Expires = newRefreshToken.Expires
+            };
+            _httpContextAccessor.HttpContext.Response.Cookies.Append("refreshToken", newRefreshToken.Token, cookieOptions);
+
+            userDto.RefreshToken = newRefreshToken.Token;
+            userDto.TokenCreated = newRefreshToken.Created;
+            userDto.TokenExpires = newRefreshToken.Expires;
+        }
+
+        public Result RefreshToken(UserDto userDto)
+        {
+            if (!_httpContextAccessor.HttpContext.Request.Cookies["refreshToken"].Equals(userDto.RefreshToken))
+            {
+                return new Result
+                {
+                    Message = "Token isn't valid",
+                    Status = false
+                };
+            }
+            if (userDto.TokenExpires < DateTime.Now)
+            {
+                return new Result
+                {
+                    Message = "Token expired",
+                    Status = false
+                };
+            }
+            string token = Generate(userDto);
+            var refreshToken = GenerateRefreshToken();
+            SetRefreshToken(userDto, refreshToken);
+            return new Result
+            {
+                Data = token,
+                Status = true
+            };
         }
     }
 }

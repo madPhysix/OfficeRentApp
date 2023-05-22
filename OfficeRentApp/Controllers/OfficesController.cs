@@ -16,6 +16,7 @@ namespace OfficeRentApp.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
+    [Authorize]
     public class OfficesController : ControllerBase
     {
         private readonly IOfficeRepository _repository;

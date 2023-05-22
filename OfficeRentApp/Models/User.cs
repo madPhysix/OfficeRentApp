@@ -11,7 +11,6 @@ namespace OfficeRentApp.Models
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
         public string? Token { get; set; }
-        [ForeignKey("UserRoleDefine")]
         public int RoleId { get; set; } = 1;
         public UserRoleDefine Role { get; set; }
         public string FirstName { get; set; }

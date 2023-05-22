@@ -14,7 +14,7 @@ namespace OfficeRentApp.Repositories.RentalRepositories
         {
             _context = context;
         }
-        [Authorize(Roles = "Admin,User")]
+        [Authorize(Roles = "Admin")]
         public string AddRental(Rental rental)
         {
             ClearData();

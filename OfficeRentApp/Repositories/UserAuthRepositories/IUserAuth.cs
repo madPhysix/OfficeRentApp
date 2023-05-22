@@ -14,5 +14,6 @@ namespace OfficeRentApp.Repositories.UserAuthRepositories
         public bool PasswordChange(string userName, PasswordDto passwordDto);
         public Result ForgotPassword(EmailDto emailDto ,int sentCode);
         public Result RestorePassword(RestorePasswordDto restorePasswordDto);
+        public Result RefreshToken(UserDto userDto);
     }
 }

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using OfficeRentApp.Data;
@@ -67,19 +68,24 @@ builder.Services.AddScoped<IUserAuth, UserAuth>();
 builder.Services.AddScoped<ImageManipulation>();
 builder.Services.AddScoped<RandomCodeMaker>();
 builder.Services.AddScoped<EmailSender>();
+builder.Services.AddHttpContextAccessor();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+
+
+
+app.UseDeveloperExceptionPage();
+
+app.UseRouting();
+app.UseStaticFiles();
 
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseStaticFiles();
 
 app.MapControllers();
 

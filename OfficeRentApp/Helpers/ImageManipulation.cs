@@ -36,14 +36,15 @@ namespace OfficeRentApp.Helpers
                 }
                 foreach (var file in objfiles) 
                 {
-                    using (FileStream fileStream = System.IO.File.Create(_environment.WebRootPath + "\\Upload\\" + DateTime.Now.ToShortDateString() + file.FileName ))
+                    var currentDate = DateTime.Now.ToString("ddMMyyyyHHmmsss");
+                    using (FileStream fileStream = System.IO.File.Create(_environment.WebRootPath + "\\Upload\\" + currentDate + file.FileName ))
                     {
                         file.CopyTo(fileStream);
                         fileStream.Flush();
                         var image = new ImageManipulation()
                         {
                             OfficeId = officeId,
-                            ImageUrl = "\\Upload\\" + DateTime.Now.ToShortDateString() + file.FileName
+                            ImageUrl = "\\Upload\\" + currentDate + file.FileName
                         };
                         _context.Images.Add(image);
                         _context.SaveChanges();

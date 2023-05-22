@@ -37,6 +37,15 @@ namespace OfficeRentApp.Controllers
         {
             return _userauth.Login(login);
         }
+
+        [Authorize]
+        [HttpPost("Refresh-Token")]
+        public Result RefreshToken(UserDto userDto)
+        {
+            return _userauth.RefreshToken(userDto);
+        }
+
+        [Authorize]
         [HttpPost("PasswordChange")]
         public Result PasswordChange(PasswordDto passwordDto)
         {
